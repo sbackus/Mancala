@@ -38,37 +38,47 @@ class Pit(Cup):
         if numberOfStones-1>0:
             self.nextCup.sew(numberOfStones-1)
 
+    def __str__(self):
+        return "("+str(self.stones)+")"
+
 
 class Store(Cup):
-    pass
+    def __init__(self,stones=0, next=None):
+        self.stones = stones
+        self.nextCup = next
 
-class Side(object):
-    def __init__(self,pitsPerSide=6):
-        self.cups = []
-        for i in range(0,pitsPerSide):
-            self.cups.append(Pit())
-        self.cups.append(Store())
-        for i in range(0,pitsPerSide):
-            self.cups[i].setNext(self.cups[i+1])
+    def __str__(self):
+        return "(  "+str(self.stones)+"  )"
 
-    def getCup(self,index):
-        return self.cups[index]
-
-    def getStore(self):
-        return self.cups[-1]
 
 class Board(object):
-    def __init__(self,pitsPerSide=6):
-        self.sides = [Side(),Side()]
-        self.sides[0].getStore().setNext(self.sides[1].getCup(0))
-        self.sides[1].getStore().setNext(self.sides[0].getCup(0))
+    def __init__(self):
+        self.sides = [[],[]]
+        self.sides[0] = self.initializeSide()
+        self.sides[1] = self.initializeSide()
+        self.getStore(0).setNext(self.getCup(1,0))
+        self.getStore(1).setNext(self.getCup(0,0))
 
-    def getCup(self,side,index):
-        return self.getSide(side).getCup(index)
+    def initializeSide(self, pitsPerSide=6):
+        cups = []
+        for i in range(0,pitsPerSide):
+            cups.append(Pit())
+        cups.append(Store())
+        for i in range(0,pitsPerSide):
+           cups[i].setNext(cups[i+1])
+        return cups
 
-    def getSide(self,index):
-        return self.sides[index]
+    def getCup(self,sideNumber,index):
+        return self.sides[sideNumber][index]
 
-    def __print__(self):
-        #for cups in sides
-        print self.sides
+    def getSide(self,sideNumber):
+        return self.sides[sideNumber]
+
+    def getStore(self,sideNumber):
+        return self.getSide(sideNumber)[-1]
+
+    def __str__(self):
+        board = "\n  "+ str(self.getStore(0))+"\n"
+        for i in range(0,6):
+            board += str(i) + "-"+str(self.sides[0][i]) +" "+ str(self.sides[1][i]) + "-"+ str(i)+"\n"
+        return board +"  "+ str(self.getStore(1))+"\n"

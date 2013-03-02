@@ -56,6 +56,9 @@ class TestCup(unittest.TestCase):
         self.assertEquals(cup2.getStoneCount(),3)
         self.assertEquals(cup3.getStoneCount(),4)
 
+    def test_that_a_new_Store_is_empty(self):
+        self.assertEquals(Store().getStoneCount(),0)
+
 
 
 class A_New_Default_Board_Should(unittest.TestCase):
@@ -77,8 +80,15 @@ class A_New_Default_Board_Should(unittest.TestCase):
         side1 = board.getSide(1)
         for side in[side0,side1]:
             for i in range(0,6):
-                self.assertEquals(type(side0.getCup(i)),Pit)
-            self.assertEquals(type(side0.getCup(6)),Store)
+                self.assertEquals(type(side0[i]),Pit)
+            self.assertEquals(type(side0[6]),Store)
+
+    def test_prints(self):
+        print Board()
+
+
+
+#   TODO:  def test_str_method
 
 
 
