@@ -26,17 +26,17 @@ class Cup(object):
     def addStone(self):
         self.stones +=1
 
-class Pit(Cup):
-
-    def select(self):
-        self.nextCup.sew(self.stones)
-        self.stones = 0
-
     def sew(self, numberOfStones):
         if numberOfStones>0:
             self.stones +=1
         if numberOfStones-1>0:
             self.nextCup.sew(numberOfStones-1)
+
+class Pit(Cup):
+
+    def select(self):
+        self.nextCup.sew(self.stones)
+        self.stones = 0
 
     def __str__(self):
         return "("+str(self.stones)+")"
@@ -49,7 +49,6 @@ class Store(Cup):
 
     def __str__(self):
         return "(  "+str(self.stones)+"  )"
-
 
 class Board(object):
     def __init__(self):
@@ -77,8 +76,11 @@ class Board(object):
     def getStore(self,sideNumber):
         return self.getSide(sideNumber)[-1]
 
+    def select(self,sideNumber,index):
+        self.getCup(sideNumber,index).select()
+
     def __str__(self):
-        board = "\n  "+ str(self.getStore(0))+"\n"
+        board = "\n  "+ str(self.getStore(1))+"\n"
         for i in range(0,6):
-            board += str(i) + "-"+str(self.sides[0][i]) +" "+ str(self.sides[1][i]) + "-"+ str(i)+"\n"
-        return board +"  "+ str(self.getStore(1))+"\n"
+            board += str(i) + "-"+str(self.sides[0][i]) +" "+ str(self.sides[1][5-i]) + "-"+ str(5-i)+"\n"
+        return board +"  "+ str(self.getStore(0))+"\n"

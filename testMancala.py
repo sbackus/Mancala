@@ -59,6 +59,12 @@ class TestCup(unittest.TestCase):
     def test_that_a_new_Store_is_empty(self):
         self.assertEquals(Store().getStoneCount(),0)
 
+    def test_Store_str(self):
+        self.assertEquals(str(Store()),"(  0  )")
+
+    def test_Pit_str(self):
+        self.assertEquals(str(Pit()),"(4)")
+
 
 
 class A_New_Default_Board_Should(unittest.TestCase):
@@ -83,12 +89,25 @@ class A_New_Default_Board_Should(unittest.TestCase):
                 self.assertEquals(type(side0[i]),Pit)
             self.assertEquals(type(side0[6]),Store)
 
-    def test_prints(self):
-        print Board()
+    def test_Board_str(self):
+        board_str = str(Board())
+        self.assertTrue(board_str.find(str(Store()))!=-1)
+        self.assertTrue(board_str.find(str(Pit()))!=-1)
 
+    def test_select_on_default_board(self):
+        board = Board()
+        board.select(0,3)
+        board.select(1,3)
+        board.select(1,0)
+        print board
+        self.assertEquals(board.getCup(0,3).getStoneCount(),0)
+        self.assertEquals(board.getCup(0,1).getStoneCount(),4)
+        self.assertEquals(board.getCup(1,5).getStoneCount(),6)
+        self.assertEquals(board.getCup(1,3).getStoneCount(),1)
+        self.assertEquals(board.getCup(1,0).getStoneCount(),0)
+        self.assertEquals(board.getStore(0).getStoneCount(),1)
+        self.assertEquals(board.getStore(1).getStoneCount(),1)
 
-
-#   TODO:  def test_str_method
 
 
 
